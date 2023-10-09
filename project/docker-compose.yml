@@ -1,11 +1,35 @@
 version: '3'
 
 services:
+  caddy:
+    image: thequy/micro-caddy:1.0.0
+    deploy:
+      mode: replicated
+      replicas: 1
+    ports:
+      - "80:80"
+      - "443:443"
+    # volumes:
+    #   - caddy_data:/data
+    #   - caddy_config:/config
+
+  front-end:
+    image: thequy/front-end:1.0.0
+    build:
+      context: ./../front-end
+      dockerfile: front-end.dockerfile
+    restart: always
+    ports:
+      - "3000:80"
+    deploy:
+      mode: replicated
+      replicas: 1
 
   broker-service:
+    image: thequy/broker-service:1.0.0
     build:
       context: ./../broker-service
-      dockerfile: ./../broker-service/broker-service.dockerfile
+      dockerfile: broker-service.dockerfile
     restart: always
     ports:
       - "8080:80"
@@ -14,18 +38,20 @@ services:
       replicas: 1
 
   logger-service:
+    image: thequy/logger-service:1.0.0
     build:
       context: ./../logger-service
-      dockerfile: ./../logger-service/logger-service.dockerfile
+      dockerfile: logger-service.dockerfile
     restart: always
     deploy:
       mode: replicated
       replicas: 1
 
   authentication-service:
+    image: thequy/authentication-service:1.0.0
     build:
       context: ./../authentication-service
-      dockerfile: ./../authentication-service/authentication-service.dockerfile
+      dockerfile: authentication-service.dockerfile
     restart: always
     ports:
       - "8081:80"
@@ -36,17 +62,19 @@ services:
       DSN: "host=postgres port=5432 user=postgres password=password dbname=users sslmode=disable timezone=UTC connect_timeout=5"
 
   listener-service:
+    image: thequy/listener-service:1.0.0
     build:
       context: ./../listener-service
-      dockerfile: ./../listener-service/listener-service.dockerfile
+      dockerfile: listener-service.dockerfile
     deploy:
       mode: replicated
       replicas: 1
 
   mailer-service:
+    image: thequy/mail-service:1.0.0
     build:
       context: ./../mail-service
-      dockerfile: ./../mail-service/mail-service.dockerfile
+      dockerfile: mail-service.dockerfile
     restart: always
     deploy:
       mode: replicated

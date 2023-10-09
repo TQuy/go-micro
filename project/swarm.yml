@@ -4,10 +4,26 @@ version: "3"
 # have to change the image: <name> part to whatever your image names are
 
 services:
+  caddy:
+    image: thequy/micro-caddy:1.0.2
+    deploy:
+      mode: replicated
+      replicas: 1
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+
+  front-end:
+    image: thequy/front-end:1.0.4
+    deploy:
+      mode: replicated
+      replicas: 1
+
   broker-service:
     image: thequy/broker-service:1.0.0
-    ports:
-      - "8080:80"
     deploy:
       mode: replicated
       replicas: 1
@@ -76,7 +92,6 @@ services:
     image: "postgres:14.0"
     ports:
       - "5432:5432"
-    restart: always
     deploy:
       mode: replicated
       replicas: 1
@@ -86,3 +101,8 @@ services:
       POSTGRES_DB: users
     volumes:
       - ./db-data/postgres/:/var/lib/postgresql/data/
+
+volumes:
+  caddy_data:
+    external: true
+  caddy_config:
