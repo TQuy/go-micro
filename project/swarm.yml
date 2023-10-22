@@ -5,7 +5,7 @@ version: "3"
 
 services:
   caddy:
-    image: thequy/micro-caddy:1.0.0
+    image: thequy/micro-caddy:1.0.2
     deploy:
       mode: replicated
       replicas: 1
@@ -17,7 +17,7 @@ services:
       - caddy_config:/config
 
   front-end:
-    image: thequy/front-end:1.0.0
+    image: thequy/front-end:1.0.4
     deploy:
       mode: replicated
       replicas: 1
