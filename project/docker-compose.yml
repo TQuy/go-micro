@@ -2,7 +2,10 @@ version: '3'
 
 services:
   caddy:
-    image: thequy/micro-caddy:1.0.0
+    image: thequy/micro-caddy:local
+    build:
+      context: .
+      dockerfile: caddy.dockerfile
     deploy:
       mode: replicated
       replicas: 1
@@ -14,19 +17,19 @@ services:
     #   - caddy_config:/config
 
   front-end:
-    image: thequy/front-end:1.0.0
+    image: thequy/front-end:local
     build:
       context: ./../front-end
       dockerfile: front-end.dockerfile
     restart: always
     ports:
-      - "3000:80"
+      - "3000:3000"
     deploy:
       mode: replicated
       replicas: 1
 
   broker-service:
-    image: thequy/broker-service:1.0.0
+    image: thequy/broker-service:local
     build:
       context: ./../broker-service
       dockerfile: broker-service.dockerfile
@@ -38,7 +41,7 @@ services:
       replicas: 1
 
   logger-service:
-    image: thequy/logger-service:1.0.0
+    image: thequy/logger-service:local
     build:
       context: ./../logger-service
       dockerfile: logger-service.dockerfile
@@ -48,7 +51,7 @@ services:
       replicas: 1
 
   authentication-service:
-    image: thequy/authentication-service:1.0.0
+    image: thequy/authentication-service:local
     build:
       context: ./../authentication-service
       dockerfile: authentication-service.dockerfile
@@ -62,7 +65,7 @@ services:
       DSN: "host=postgres port=5432 user=postgres password=password dbname=users sslmode=disable timezone=UTC connect_timeout=5"
 
   listener-service:
-    image: thequy/listener-service:1.0.0
+    image: thequy/listener-service:local
     build:
       context: ./../listener-service
       dockerfile: listener-service.dockerfile
@@ -71,7 +74,7 @@ services:
       replicas: 1
 
   mailer-service:
-    image: thequy/mail-service:1.0.0
+    image: thequy/mail-service:local
     build:
       context: ./../mail-service
       dockerfile: mail-service.dockerfile

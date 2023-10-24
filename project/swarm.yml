@@ -5,7 +5,7 @@ version: "3"
 
 services:
   caddy:
-    image: thequy/micro-caddy:1.0.2
+    image: thequy/micro-caddy:local
     deploy:
       mode: replicated
       replicas: 1
@@ -17,25 +17,27 @@ services:
       - caddy_config:/config
 
   front-end:
-    image: thequy/front-end:1.0.4
+    image: thequy/front-end:local
     deploy:
       mode: replicated
       replicas: 1
+    environment:
+      BROKER_URL: "http://backend"
 
   broker-service:
-    image: thequy/broker-service:1.0.0
+    image: thequy/broker-service:local
     deploy:
       mode: replicated
       replicas: 1
 
   listener-service:
-    image: thequy/listener-service:1.0.0
+    image: thequy/listener-service:local
     deploy:
       mode: replicated
       replicas: 1
 
   authentication-service:
-    image: thequy/authentication-service:1.0.0
+    image: thequy/authentication-service:local
     deploy:
       mode: replicated
       replicas: 1
@@ -43,13 +45,13 @@ services:
       DSN: "host=postgres port=5432 user=postgres password=password dbname=users sslmode=disable timezone=UTC connect_timeout=5"
 
   logger-service:
-    image: thequy/logger-service:1.0.0
+    image: thequy/logger-service:local
     deploy:
       mode: replicated
       replicas: 1
 
   mailer-service:
-    image: thequy/mail-service:1.0.0
+    image: thequy/mail-service:local
     deploy:
       mode: replicated
       replicas: 1
