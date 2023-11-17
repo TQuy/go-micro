@@ -22,13 +22,6 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "500m"
-          env:
-            - name: mailhog_INITDB_DATABASE
-              value: "logs"
-            - name: mailhog_INITDB_ROOT_USERNAME
-              value: "admin"
-            - name: mailhog_INITDB_ROOT_PASSWORD
-              value: "password"
           ports:
             - containerPort: 1025
             - containerPort: 8025
